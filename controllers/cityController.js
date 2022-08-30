@@ -10,26 +10,28 @@ const cityController = {
         try {
            await new City(req.body).save()
            res.status(201).json({
-                message: 'event created',
+                message: 'City Has Been Created',
                 succes: true
            })
         } catch (error) {
             res.status(400).json({
-                message: 'could not created',
+                message: 'Could Not Be Created',
                 succes: false
             })
         }
 
     },
     read: async (req, res) =>{
+
         const {id} = req.params
+
         try {
 
            let city = await City.findOne({_id:id})
 
            if (city){
             res.status(200).json({
-                message: 'You get one event',
+                message: 'You Get One City',
                 response: city,
                 succes: true
             })
@@ -52,9 +54,46 @@ const cityController = {
     },
     upDate: async (req, res) =>{
 
+        const {id} = req.params
+
+        try {
+            const upDatecity = req.body
+
+            const cityUpdated = await City.findByIdAndUpdate(id, upDatecity)
+            
+            res.status(200).json({
+                message:cityUpdated.city + ': City Has Been UpDated',
+                succes: true
+           })
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                message: '',
+                succes: false
+            })
+        }
+
+        
+
     },
     destroy: async (req, res) =>{
 
+        const {id} = req.params
+
+        try {
+            let cityDeleted = await City.findByIdAndDelete(id)
+            console.log(cityDeleted)
+            res.status(200).json({
+                message: cityDeleted.city + ': City Has Been Deleted',
+                succes: true
+           })
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                message: '',
+                succes: false
+            })
+        }
     },
 
 
