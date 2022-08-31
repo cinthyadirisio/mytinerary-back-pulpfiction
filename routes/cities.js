@@ -4,7 +4,7 @@ const { create, read, destroy, upDate, readAll } = require('../controllers/cityC
 
 /* Routes for controllers  */
 
-router.get('/all', readAll);
+router.get('/', readAll);
 router.post('/', create);
 router.get('/:id', read);
 router.delete('/:id', destroy)
