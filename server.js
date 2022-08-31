@@ -1,6 +1,8 @@
 require('dotenv').config()
 require('./config/database')
 
+const cors = require('cors')
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -26,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/cities', CITY);
+app.use(cors())
 
 //app.use('/users', usersRouter);
 

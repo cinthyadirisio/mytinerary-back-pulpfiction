@@ -6,7 +6,7 @@ const cityController = {
 
     create: async(req, res) =>{
 
-        const {city, country, photo, fundation, description, population} = req.body
+        const {city, country, photo, fundation, description, population, smalldescription, featuredLocation} = req.body
 
         try {
            await new City(req.body).save()
