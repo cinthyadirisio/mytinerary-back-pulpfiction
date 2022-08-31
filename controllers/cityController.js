@@ -58,13 +58,24 @@ const cityController = {
 
         try {
             const upDatecity = req.body
-
-            const cityUpdated = await City.findByIdAndUpdate(id, upDatecity)
             
-            res.status(200).json({
-                message:cityUpdated.city + ': City Has Been UpDated',
-                succes: true
-           })
+            let cityforUpdate = await City.findOne({_id:id})
+
+            if(!cityforUpdate){
+                res.status(400).json({
+                    message: 'Missing Data Error, please review your update request',
+                    succes: false
+                })
+
+            }else{
+                const cityUpdated = await City.findByIdAndUpdate(id, upDatecity)
+                res.status(200).json({
+                    message:cityUpdated.city + ': City Has Been UpDated',
+                    succes: true
+               })
+            }
+            
+
         } catch (error) {
             console.log(error)
             res.status(400).json({
@@ -81,12 +92,23 @@ const cityController = {
         const {id} = req.params
 
         try {
-            let cityDeleted = await City.findByIdAndDelete(id)
-            console.log(cityDeleted)
-            res.status(200).json({
-                message: cityDeleted.city + ': City Has Been Deleted',
-                succes: true
-           })
+
+            let city = await City.findOne({_id:id})
+
+            if(!city){
+                res.status(404).json({
+                    message: 'city Not Found , cannot be Deleted',
+                    succes: false
+                })
+            } else {
+                let cityDeleted = await City.findByIdAndDelete(id)
+                res.status(200).json({
+                    message: cityDeleted.city + ': City Has Been Deleted',
+                    succes: true
+               })
+
+            }
+
         } catch (error) {
             console.log(error)
             res.status(400).json({
