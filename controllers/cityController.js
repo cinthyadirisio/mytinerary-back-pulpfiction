@@ -1,3 +1,4 @@
+const CITY = require('../models/City')
 const City = require('../models/City')
 
 
@@ -117,6 +118,56 @@ const cityController = {
             })
         }
     },
+    readAll: async (req, res) => {
+        
+        try {
+          let  cities = await City.find()
+
+          if(cities){
+            res.status(200).json({
+                message: ': Cities Found',
+                response: cities,
+                succes: true
+           })
+
+          } else {
+            res.status(404).json({
+                message: 'Cities Not Found ',
+                succes: false
+            })
+          }
+        
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).json()
+        }
+    },
+    startWith: async (req, res) => {
+        
+        try {
+          let  cities = await City.find()
+
+          if(cities){
+            res.status(200).json({
+                message: ': Cities Found',
+                response: cities,
+                succes: true
+           })
+
+          } else {
+            res.status(404).json({
+                message: 'Cities Not Found ',
+                succes: false
+            })
+          }
+        
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).json()
+        }
+    }
 
 
 }
