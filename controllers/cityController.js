@@ -47,7 +47,7 @@ const cityController = {
         } catch (error) {
             console.log(error)
             res.status(400).json({
-                message: '',
+                message: 'Catch read',
                 succes: false
             })
         }
@@ -118,56 +118,39 @@ const cityController = {
             })
         }
     },
-    readAll: async (req, res) => {
+    all: async (req, res) => {
+
+        let mycities
+
+        let query = {}
+
+        if (req.query.city) {
+            query.city = req.query.city
+        }
 
         try {
-            let cities = await City.find()
 
-            if (cities) {
-                res.status(200).json({
-                    message: ': Cities Found',
-                    response: cities,
-                    succes: true
-                })
-
+            if (query.city) {
+                mycities = await City.find({city:{$regex: new RegExp("^" + req.query.city.toLowerCase(),"i")}})
             } else {
-                res.status(404).json({
-                    message: 'Cities Not Found ',
-                    succes: false
-                })
+                mycities = await City.find()
             }
 
+            res.status(200).json({
+                message: "City Found",
+                response: mycities,
+                succes: true
+            })
+            
 
         } catch (err) {
             console.log(err)
             res.status(500).json()
         }
     },
-    startWith: async (req, res) => {
 
-        try {
-            let cities = await City.find()
-
-            if (cities) {
-                res.status(200).json({
-                    message: ': Cities Found',
-                    response: cities,
-                    succes: true
-                })
-
-            } else {
-                res.status(404).json({
-                    message: 'Cities Not Found ',
-                    succes: false
-                })
-            }
-
-
-        } catch (err) {
-            console.log(err)
-            res.status(500).json()
-        }
-    }
+    
+    
 
 
 }
