@@ -7,7 +7,7 @@ const citiesSchema = new mongoose.Schema({
     photo: {type: String, required: true},
     fundation: {type: Date, required: true},
     description: {type: String, required: true},
-    smalldescription: {type: String, required: true},
+    smalldescription: {type: String},
     population: {type: Number, required: true},
 })
 
