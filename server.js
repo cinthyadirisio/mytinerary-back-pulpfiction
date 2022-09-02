@@ -11,6 +11,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 
 const CITY = require('./routes/cities');
+const USER = require('./routes/newUsers');
+
 //var usersRouter = require('./routes/users');
 
 const cors = require('cors')
@@ -29,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/cities', CITY);
+app.use('/user', USER);
 
 //app.use('/users', usersRouter);
 
