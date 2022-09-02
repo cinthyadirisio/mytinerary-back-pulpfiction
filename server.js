@@ -12,6 +12,7 @@ var indexRouter = require('./routes/index');
 
 const CITY = require('./routes/cities');
 const USER = require('./routes/newUsers');
+const ITINERARY = require('./routes/itineraries')
 
 //var usersRouter = require('./routes/users');
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/cities', CITY);
 app.use('/user', USER);
+app.use('/myItineraries', ITINERARY)
 
 //app.use('/users', usersRouter);
 
