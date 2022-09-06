@@ -1,3 +1,4 @@
+const { urlencoded } = require('express')
 const mongoose = require('mongoose')
 
 const itinerarySchema = new mongoose.Schema({
@@ -8,6 +9,7 @@ const itinerarySchema = new mongoose.Schema({
     duration: {type: Number, required: true},
     likes: {type: Array, required: true},
     tags: {type: Array, required: true},
+    photo: {type: String},
 })
 
 const ITINERARY = mongoose.model(
