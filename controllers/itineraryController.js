@@ -84,6 +84,117 @@ const itineraryController = {
             })
         }
     },
+    read: async (req, res) => {
+
+        const { id } = req.params
+
+        try {
+
+            let myitinerary = await Itinerary.findOne({ _id: id })
+            .populate('user', {name:1})
+            .populate('city', {city:1})
+
+            if (myitinerary) {
+                res.status(200).json({
+                    message: 'You Get Itinerary',
+                    response: myitinerary,
+                    succes: true
+                })
+            } else {
+                res.status(404).json({
+                    message: 'Itinerary Not Found',
+                    succes: false
+                })
+            }
+
+
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                message: 'Catch read',
+                succes: false
+            })
+        }
+
+    },
+    readByCity: async (req, res) => {
+        let  myitinerary 
+        let query = {}
+        if (req.query.city) {
+            query.city = req.query.city
+        }
+        if (req.query.user) {
+            query.user = req.query.user
+        }
+        try {
+            if(query.city){
+                myitinerary = await Itinerary.find({city: req.query.city})
+
+            }
+            if(query.user){
+                myitinerary = await Itinerary.find({user: req.query.user})
+
+            }
+
+            if (myitinerary.length > 0) {
+                res.status(200).json({
+                    message: 'You Get Itinerary',
+                    response: myitinerary,
+                    succes: true
+                })
+            } else {
+                res.status(404).json({
+                    message: 'Itinerary Not Found',
+                    succes: false
+                })
+            }
+
+
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                message: 'Cannot read itinerary by ID',
+                succes: false
+            })
+        }
+
+    },
+    readByUser: async (req, res) => {
+
+        let myitineraryByUser
+
+        let query = {}
+
+        if (req.query.user) {
+            query.user = req.query.user
+        }
+        try {
+            if(query.user){
+                myitineraryByUser = await Itinerary.find({user: req.query.user})
+            }
+            if (myitineraryByUser.length > 0) {
+                res.status(200).json({
+                    message: 'You Get Itinerary by User',
+                    response: myitineraryByUser,
+                    succes: true
+                })
+            } else {
+                res.status(404).json({
+                    message: 'Itinerary Not Found by User',
+                    succes: false
+                })
+            }
+
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                message: 'Cannot read itinerary by User',
+                succes: false
+            })
+        }
+
+    },
+
 }
 
 module.exports = itineraryController
