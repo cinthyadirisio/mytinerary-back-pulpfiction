@@ -14,6 +14,7 @@ const CITY = require('./routes/cities');
 const USER = require('./routes/newUsers');
 const ITINERARY = require('./routes/itineraries')
 const ACTIVITY = require('./routes/activity')
+const COMMENT = require('./routes/comments')
 
 //var usersRouter = require('./routes/users');
 
@@ -36,6 +37,7 @@ app.use('/cities', CITY);
 app.use('/user', USER);
 app.use('/myItineraries', ITINERARY)
 app.use('/activities', ACTIVITY)
+app.use('/comments', COMMENT)
 
 
 //app.use('/users', usersRouter);
