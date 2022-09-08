@@ -1,4 +1,3 @@
-const CITY = require('../models/City')
 const City = require('../models/City')
 
 
@@ -6,7 +5,6 @@ const cityController = {
 
     create: async (req, res) => {
 
-        const { city, country, photo, fundation, description, population, smalldescription, featuredLocation } = req.body
 
         try {
             await new City(req.body).save()
