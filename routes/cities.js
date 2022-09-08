@@ -8,7 +8,7 @@ router.get('/', all);
 router.post('/', create);
 router.get('/:id', read);
 router.delete('/:id', destroy)
-router.patch('/editCity/:id', upDate)
+router.patch('/:id', upDate)
 
 
 module.exports = router;
