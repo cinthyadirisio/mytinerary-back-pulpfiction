@@ -23,7 +23,7 @@ const userController = {
                     pass = bcryptjs.hashSync(pass, 10)
                     user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code }).save()
 
-                    sendMail(email, code)
+                    sendMail(email, code, name, photo)
 
                     res.status(201).json({
                         message: "user signed up",
