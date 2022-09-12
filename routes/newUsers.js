@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const { createUser } = require('../controllers/userController')
+const { signUp, verifyMail } = require('../controllers/userController')
 
 /* Routes for controllers  */
 
 
-router.post('/auth', createUser)
+//router.post('/auth', createUser)
+router.post('/signup', signUp)
 
 
 
