@@ -132,7 +132,7 @@ const itineraryController = {
 
             }
             if(query.user){
-                myitinerary = await Itinerary.find({user: req.query.user})
+                myitinerary = await Itinerary.find({user: req.query.user}).populate('user', {name:1})
 
             }
 
