@@ -71,7 +71,28 @@ const userController = {
     },
     signIp: () =>{},
     signOut: () =>{},// findOneAndUpdate y cambiar logged de true a false
-
+    userVerify: async (req, res)=>{
+        const { code } = req.params
+        try {
+            const user = await User.findOne({code: code})
+            if(user){
+                user.verified = true
+                await user.save()
+                res.redirect('https://localhost:3000/cities')
+            } else{
+                res.status(404).json({
+                    message: "Email doesn't exist in database",
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "Account couldn't be verified",
+                success: false
+            })
+        }
+    }
 
 }
 
