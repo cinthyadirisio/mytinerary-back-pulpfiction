@@ -1,18 +1,60 @@
 const Itinerary = require ('../models/Itinerary')
+const Joi = require('joi')
+
+const itineraryValidator = Joi.object({
+    "name": Joi.string()
+    .required(),
+    "user": Joi.string()
+    .required(),
+    "city": Joi.string()
+    .required(),
+    "price": Joi.number()
+    .integer()
+    .messages({
+        number: 'Price must be integer',
+        "number.integer":'You must enter a valid number'
+    })
+    .required(),
+    "duration": Joi.number()
+    .integer()
+    .messages({
+        "number.integer":'You must enter a valid number'
+    })
+    .required(),
+    "likes": Joi.array()
+    .required(),
+    "tags": Joi.array()
+    .required(),
+    "photo": Joi.string()
+        .uri()
+        .messages({
+            'string.uri': 'You must enter a valid URL'
+        })
+        .required()
+})
+
+
+
 
 const itineraryController = {
+
     createItinerary: async (req, res) => {
 
 
         try {
-            await new Itinerary(req.body).save()
+
+            await itineraryValidator.validateAsync(req.body)
+            
+            let itineraryCreated = await new Itinerary(req.body).save()
             res.status(201).json({
                 message: 'Itinerary Has Been Created',
-                succes: true
+                succes: true,
+                response: itineraryCreated
             })
         } catch (error) {
+            console.log(error)
             res.status(400).json({
-                message: 'Could Not Be Created',
+                message: error.message,
                 succes: false
             })
         }
