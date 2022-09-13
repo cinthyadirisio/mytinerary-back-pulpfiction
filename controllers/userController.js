@@ -3,13 +3,39 @@ const crypto = require('crypto')
 const bcryptjs = require('bcryptjs')
 const sendMail = require('./sendMail')
 const { exists } = require('../models/User')
+const Joi = require('joi')
+
+const userValidator = Joi.object({
+    "name": Joi.string()
+    .required(),
+    "lastName": Joi.string()
+    .required(),
+    "country": Joi.string()
+    .required(),
+    "email": Joi.string()
+    .email()
+    .required(),
+    "pass": Joi.string()
+    .required(),
+    "photo": Joi.string()
+        .uri()
+        .messages({
+            'string.uri': 'You must enter a valid URL'
+        })
+        .required(),
+    "role": Joi.string().required(),
+    "from": Joi.string().required()
+})
 
 
 const userController = {
     
     signUp: async (req, res) => {
-        let { name, photo, email, pass, role, from } = req.body
+        let { name, photo, email, pass, role, from, country, lastName } = req.body
         try {
+            
+            await userValidator.validateAsync(req.body)
+
             let user = await User.findOne({ email })
             if (!user) {
                 let logged = false
@@ -17,7 +43,7 @@ const userController = {
                 let code = crypto.randomBytes(15).toString('hex')
                 if (from === 'form') {
                     pass = bcryptjs.hashSync(pass, 10)
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code }).save()
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
                     sendMail(email, code, name, photo)
                     res.status(201).json({
                         message: "user signed up",
@@ -26,7 +52,7 @@ const userController = {
                 } else {
                     pass = bcryptjs.hashSync(pass, 10)
                     verified = true
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code }).save()
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
                     res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
@@ -42,7 +68,7 @@ const userController = {
                     user.from.push(form)
                     user.verified = true
                     user.pass.push(bcryptjs.hashSync(pass, 10))
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code }).save()
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
                     res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
@@ -52,7 +78,7 @@ const userController = {
         } catch (error) {
             console.log(error)
             res.status(400).json({
-                message: "couldnt signed up",
+                message: error.message,
                 success: false
             })
         }
