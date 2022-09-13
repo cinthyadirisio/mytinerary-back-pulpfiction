@@ -9,7 +9,7 @@ const itinerarySchema = new mongoose.Schema({
     duration: {type: Number, required: true},
     likes: {type: Array, required: true},
     tags: {type: Array, required: true},
-    photo: {type: String},
+    photo: {type: String, required: true},
 })
 
 const ITINERARY = mongoose.model(
