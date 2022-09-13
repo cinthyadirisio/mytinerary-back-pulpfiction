@@ -6,25 +6,19 @@ const { exists } = require('../models/User')
 
 
 const userController = {
+    
     signUp: async (req, res) => {
         let { name, photo, email, pass, role, from } = req.body
-
         try {
-
             let user = await User.findOne({ email })
-
             if (!user) {
                 let logged = false
                 let verified = false
                 let code = crypto.randomBytes(15).toString('hex')
-
-
                 if (from === 'form') {
                     pass = bcryptjs.hashSync(pass, 10)
                     user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code }).save()
-
                     sendMail(email, code, name, photo)
-
                     res.status(201).json({
                         message: "user signed up",
                         success: true
@@ -33,21 +27,17 @@ const userController = {
                     pass = bcryptjs.hashSync(pass, 10)
                     verified = true
                     user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code }).save()
-
                     res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
                     })
-
                 }
-
             } else {
                 if (user.from.includes(from)) {
                     res.status(200).json({
                         message: "user already exist " + from,
                         success: false
                     })
-
                 } else {
                     user.from.push(form)
                     user.verified = true
@@ -59,41 +49,29 @@ const userController = {
                     })
                 }
             }
-
         } catch (error) {
             console.log(error)
             res.status(400).json({
                 message: "couldnt signed up",
                 success: false
             })
-
-
         }
     },
+
     signIn: async (req, res) => {
         const { email, pass, from } = req.body
         try {
-
-
             const user = await User.findOne({ email })
-
-
             if (!user) {
                 res.status(404).json({
                     message: 'User does not exist, please Sign Up!',
                     success: false
                 })
             }
-
             else if (user.verified) {
-
                 const userPass = user.pass.filter(userpassword => bcryptjs.compareSync(pass, userpassword))
-
                 if (from == "form") {
-
-
                     if (userPass.length > 0) {
-
                         const loginUser = {
                             id: user._id,
                             email: user.email,
@@ -101,8 +79,6 @@ const userController = {
                             from: user.from,
                             photo: user.photo
                         }
-
-
                         user.logged = true
                         await user.save()
                         res.status(200).json({
@@ -116,13 +92,10 @@ const userController = {
                             success: false
                         })
                     }
-
                 }
                 else {
-
                     if (userPass.length > 0) {
                         user.logged = true
-
                         const loginUser = {
                             id: user._id,
                             email: user.email,
@@ -130,22 +103,18 @@ const userController = {
                             from: user.from,
                             photo: user.photo
                         }
-
-
                         await user.save()
                         res.status(200).json({
                             message: 'Login Success',
                             success: true,
                             response: { user: loginUser }
                         })
-
                     } else {
                         res.status(404).json({
                             message: 'Login Failed, please check your email',
                             success: false
                         })
                     }
-
                 }
             }
             else {
@@ -163,7 +132,34 @@ const userController = {
         }
     },
 
-    signOut: () => { },// findOneAndUpdate y cambiar logged de true a false
+    signOut: async (req, res) => {
+        const { email } = req.body
+        try {
+            const user = await User.findOne({ email: email })
+            if (user) {
+                user.logged = false
+                await user.save()
+                res.redirect('https://localhost:3000/signin')
+                res.status(200).json({
+                    message: 'You were logged out successfully',
+                    success: true,
+                    response: user.logged
+                })
+            } else {
+                res.status(400).json({
+                    message: 'There is no such user logged in',
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "SingOut Error, please..",
+                success: false
+            })
+        }
+    },
+
     userVerify: async (req, res) => {
         const { code } = req.params
         try {
@@ -181,7 +177,7 @@ const userController = {
         } catch (error) {
             console.log(error);
             res.status(400).json({
-                message: "Account couldn't be verified",
+                message: "Account mail could not be verified",
                 success: false
             })
         }
