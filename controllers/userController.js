@@ -165,7 +165,7 @@ const userController = {
             if (user) {
                 user.logged = false
                 await user.save()
-                res.redirect('https://localhost:3000/signin')
+               // res.redirect('https://localhost:3000/signin')
                 res.status(200).json({
                     message: 'You were logged out successfully',
                     success: true,
