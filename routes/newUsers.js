@@ -4,8 +4,6 @@ const { signUp, userVerify, signIn, signOut } = require('../controllers/userCont
 
 /* Routes for controllers  */
 
-
-//router.post('/auth', createUser)
 router.post('/signup', signUp)
 router.get('/verify/:code', userVerify)
 router.post('/signin', signIn)

@@ -27,6 +27,15 @@ const userValidator = Joi.object({
     "from": Joi.string().required()
 })
 
+const userLoginValidator = Joi.object({
+    "email": Joi.string()
+    .email()
+    .required(),
+    "pass": Joi.string()
+    .required(),
+    "from": Joi.string().required()
+})
+
 
 const userController = {
     
@@ -87,6 +96,9 @@ const userController = {
     signIn: async (req, res) => {
         const { email, pass, from } = req.body
         try {
+
+            await userLoginValidator.validateAsync(req.body)
+
             const user = await User.findOne({ email })
             if (!user) {
                 res.status(404).json({
@@ -96,7 +108,7 @@ const userController = {
             }
             else if (user.verified) {
                 const userPass = user.pass.filter(userpassword => bcryptjs.compareSync(pass, userpassword))
-                if (from == "form") {
+                if (from === "form") {
                     if (userPass.length > 0) {
                         const loginUser = {
                             id: user._id,
@@ -165,7 +177,7 @@ const userController = {
             if (user) {
                 user.logged = false
                 await user.save()
-                res.redirect('https://localhost:3000/signin')
+               // res.redirect('https://localhost:3000/signin')
                 res.status(200).json({
                     message: 'You were logged out successfully',
                     success: true,
