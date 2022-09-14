@@ -72,7 +72,8 @@ const cityController = {
             res.status(201).json({
                 message: 'City Has Been Created',
                 succes: true,
-                response: cityCreated._id
+                response: cityCreated,
+                id : cityCreated._id
             })
         } catch (error) {
             console.log(error)
@@ -193,6 +194,7 @@ const cityController = {
 
             if (query.city) {
                 mycities = await City.find({ city: { $regex: new RegExp("^" + req.query.city.toLowerCase(), "i") } })
+                //response
             } else {
                 mycities = await City.find()
             }
