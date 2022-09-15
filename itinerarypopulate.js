@@ -5,7 +5,7 @@ const Itinerary = require('./models/Itinerary')
 Itinerary.create(
     { // cambodia
         name: 'Angkor Wats Temple Complex',
-        user: '63127d66bd5df3158d31150c',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3e6',
         price: 200,
         duration: 120,
@@ -15,7 +15,7 @@ Itinerary.create(
     },
     {//bali
         name: 'Temple of Water',
-        user: '63127d65bd5df3158d31150a',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3e7',
         price: 20,
         duration: 60,
@@ -25,7 +25,7 @@ Itinerary.create(
     },
     { //honshu
         name: 'Mount Fuji',
-        user: '63127d66bd5df3158d31150c',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3ea',
         price: 200,
         duration: 480,
@@ -35,7 +35,7 @@ Itinerary.create(
     },
     { //tahiti
         name: 'Matira beach',
-        user: '63127d66bd5df3158d31150c',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3e8',
         price: 100,
         duration: 300,
@@ -45,7 +45,7 @@ Itinerary.create(
     },
     {//tahiti
         name: 'Mount Otemanu',
-        user: '63127d65bd5df3158d31150a',
+        user: '6321f0d2121b44b18e17b905a',
         city: '630f934f844315c76f0bd3e8',
         price: 120,
         duration: 240,
@@ -55,7 +55,7 @@ Itinerary.create(
     },
     {//bolivar
         name: 'National Park Roraima',
-        user: '63127d66bd5df3158d31150c',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3e9',
         price: 200,
         duration: 480,
@@ -65,7 +65,7 @@ Itinerary.create(
     },
     {//bolivar
         name: 'Angel Falls',
-        user: '63127d66bd5df3158d31150c',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3e9',
         price: 200,
         duration: 120,
@@ -75,7 +75,7 @@ Itinerary.create(
     },
     {//honshu
         name: 'Honshu Tour',
-        user: '63127d65bd5df3158d31150a',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3ea',
         price: 20,
         duration: 160,
@@ -85,7 +85,7 @@ Itinerary.create(
     },
     { //maldivas
         name: 'Tsunami Monument',
-        user: '63127d66bd5df3158d31150c',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3eb',
         price: 10,
         duration: 60,
@@ -95,7 +95,7 @@ Itinerary.create(
     },
     {//bali
         name: 'Through the Fields',
-        user: '63127d65bd5df3158d31150a',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3e7',
         price: 20,
         duration: 160,
@@ -105,7 +105,7 @@ Itinerary.create(
     },
     { //maldivas
         name: 'Veligandu Island Beach',
-        user: '63127d65bd5df3158d31150a',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3ec',
         price: 20,
         duration: 160,
@@ -115,7 +115,7 @@ Itinerary.create(
     },
     {//bali 
         name: 'Ubud',
-        user: '63127d66bd5df3158d31150c',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3e7',
         price: 20,
         duration: 160,
@@ -125,7 +125,7 @@ Itinerary.create(
     },
     {//zambia 
         name: 'Traditional', 
-        user: '63127d65bd5df3158d31150a',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3f0',
         price: 20,
         duration: 160,
@@ -135,7 +135,7 @@ Itinerary.create(
     },
     {//zambia
         name: 'Adventure Time',
-        user: '63127d66bd5df3158d31150c',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3f0',
         price: 20,
         duration: 160,
@@ -145,7 +145,7 @@ Itinerary.create(
     },
     {//zambia
         name: 'Fauna and Flora',
-        user: '63127d65bd5df3158d31150a',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3f0',
         price: 20,
         duration: 160,
@@ -155,7 +155,7 @@ Itinerary.create(
     },
     {//cairo
         name: 'Water, Sand and Air',
-        user: '63127d66bd5df3158d31150c',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3f1',
         price: 20,
         duration: 160,
@@ -165,7 +165,7 @@ Itinerary.create(
     },
     {//cairo
         name: 'City Food Tour',
-        user: '63127d66bd5df3158d31150c',
+        user: '632231c958e8931ffba26981',
         city: '630f934f844315c76f0bd3f1',
         price: 20,
         duration: 160,
@@ -175,7 +175,7 @@ Itinerary.create(
     },
     {//cairo
         name: 'Citadel Tour',
-        user: '63127d66bd5df3158d31150c',
+        user: '6321f0d2121b44b18e17b905',
         city: '630f934f844315c76f0bd3f1',
         price: 20,
         duration: 160,
