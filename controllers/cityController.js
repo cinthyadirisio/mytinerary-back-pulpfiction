@@ -175,7 +175,7 @@ const cityController = {
         } catch (error) {
             console.log(error)
             res.status(400).json({
-                message: '',
+                message: error.message,
                 succes: false
             })
         }

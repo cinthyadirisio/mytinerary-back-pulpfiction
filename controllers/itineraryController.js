@@ -106,7 +106,7 @@ const itineraryController = {
 
             if (!itinerary) {
                 res.status(404).json({
-                    message: 'city Not Found , cannot be Deleted',
+                    message: 'Itinerary Not Found , cannot be Deleted',
                     succes: false
                 })
             } else {
@@ -121,7 +121,7 @@ const itineraryController = {
         } catch (error) {
             console.log(error)
             res.status(400).json({
-                message: '',
+                message: error.message,
                 succes: false
             })
         }
