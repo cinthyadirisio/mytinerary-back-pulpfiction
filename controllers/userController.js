@@ -115,7 +115,8 @@ const userController = {
                             email: user.email,
                             name: user.name,
                             from: user.from,
-                            photo: user.photo
+                            photo: user.photo,
+                            role: user.role
                         }
                         user.logged = true
                         await user.save()
@@ -139,7 +140,8 @@ const userController = {
                             email: user.email,
                             name: user.name,
                             from: user.from,
-                            photo: user.photo
+                            photo: user.photo,
+                            role: user.role
                         }
                         await user.save()
                         res.status(200).json({
