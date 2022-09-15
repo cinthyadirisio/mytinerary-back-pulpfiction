@@ -16,6 +16,7 @@ describe('POST /cities', function () {
                 return done();
             })
     })
+    
     it('Must respond with id', function (done) {
         request(app)
             .post('/cities')
