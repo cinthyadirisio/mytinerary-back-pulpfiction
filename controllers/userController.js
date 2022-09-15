@@ -164,7 +164,7 @@ const userController = {
         } catch (error) {
             console.log(error);
             res.status(400).json({
-                message: 'Login Failed',
+                message: error.message,
                 success: false
             })
         }
