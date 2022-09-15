@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/cities', CITY);
-app.use('/user', USER);
+app.use('/auth', USER);
 app.use('/myItineraries', ITINERARY)
 app.use('/activities', ACTIVITY)
 app.use('/comments', COMMENT)
