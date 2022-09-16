@@ -4,7 +4,7 @@ const OAuth2 = google.auth.OAuth2
 const { GOOGLE_USER, GOOGLE_ID, GOOGLE_SECRET, GOOGLE_REFRESH, GOOGLE_URL } = process.env
 
 
-const sendMail = async (mail, code, name, photo) => {
+const sendMail = async (email, code, name) => {
 
     const client = new OAuth2(
         GOOGLE_ID,
@@ -39,7 +39,7 @@ const sendMail = async (mail, code, name, photo) => {
 
     const mailOptions = {
         from: GOOGLE_USER,
-        to: mail,
+        to: email,
         subject: 'Verify your Pulp Fiction Account',
         html: `
             <h1 style="text-align: center; color: #20d8ed;"><strong>
@@ -48,7 +48,7 @@ const sendMail = async (mail, code, name, photo) => {
             <p style="text-align: center;">&nbsp;</p>
             <p><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="https://i.pinimg.com/originals/ba/4e/51/ba4e51dbabcc361e9393d32f2514624d.gif" width="543" height="330" /></strong></p>
             <p>&nbsp;</p>
-            <p style="text-align: center;">Please click the link to verify your email.  <br/> <br/>  <a style="background: #04BF9D; color: #ffffff; padding: 10px 50px; border-radius: 3px; text-align: center;" href="https://localhost:4000/${code}">confirm</a></p>
+            <p style="text-align: center;">Please click the link to verify your email.  <br/> <br/>  <a style="background: #04BF9D; color: #ffffff; padding: 10px 50px; border-radius: 3px; text-align: center;" href="http://localhost:4000/auth/verify/${code}">confirm</a></p>
         `
     }
 
