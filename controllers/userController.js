@@ -53,7 +53,7 @@ const userController = {
                 if (from === 'form') {
                     pass = bcryptjs.hashSync(pass, 10)
                     user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
-                    sendMail(email, code, name, photo)
+                    sendMail(email, code, name)
                     res.status(201).json({
                         message: "user signed up",
                         success: true
@@ -61,7 +61,7 @@ const userController = {
                 } else {
                     pass = bcryptjs.hashSync(pass, 10)
                     verified = true
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, country, lastName }).save()
                     res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
@@ -74,10 +74,10 @@ const userController = {
                         success: false
                     })
                 } else {
-                    user.from.push(form)
+                    user.from.push(from)
                     user.verified = true
                     user.pass.push(bcryptjs.hashSync(pass, 10))
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, country, lastName }).save()
                     res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
@@ -127,7 +127,7 @@ const userController = {
                         })
                     } else {
                         res.status(400).json({
-                            message: 'Login Failed, please check your password',
+                            message: 'Login Failed, please check your email and password',
                             success: false
                         })
                     }
@@ -151,7 +151,7 @@ const userController = {
                         })
                     } else {
                         res.status(404).json({
-                            message: 'Login Failed, please check your email',
+                            message: 'Login Failed, please check your password',
                             success: false
                         })
                     }
@@ -179,7 +179,6 @@ const userController = {
             if (user) {
                 user.logged = false
                 await user.save()
-               // res.redirect('https://localhost:3000/signin')
                 res.status(200).json({
                     message: 'You were logged out successfully',
                     success: true,
@@ -207,7 +206,7 @@ const userController = {
             if (user) {
                 user.verified = true
                 await user.save()
-                res.redirect('https://localhost:3000/cities')
+                res.redirect('http://localhost:3000/auth/signin')
             } else {
                 res.status(404).json({
                     message: "Email doesn't exist in database",
