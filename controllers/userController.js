@@ -1,23 +1,227 @@
-const User = require ('../models/User')
+const User = require('../models/User')
+const crypto = require('crypto')
+const bcryptjs = require('bcryptjs')
+const sendMail = require('./sendMail')
+const { exists } = require('../models/User')
+const Joi = require('joi')
+
+const userValidator = Joi.object({
+    "name": Joi.string()
+    .required(),
+    "lastName": Joi.string()
+    .required(),
+    "country": Joi.string()
+    .required(),
+    "email": Joi.string()
+    .email()
+    .required(),
+    "pass": Joi.string()
+    .required(),
+    "photo": Joi.string()
+        .uri()
+        .messages({
+            'string.uri': 'You must enter a valid URL'
+        })
+        .required(),
+    "role": Joi.string().required(),
+    "from": Joi.string().required()
+})
+
+const userLoginValidator = Joi.object({
+    "email": Joi.string()
+    .email()
+    .required(),
+    "pass": Joi.string()
+    .required(),
+    "from": Joi.string().required()
+})
+
 
 const userController = {
-    createUser: async (req, res) => {
-
-
+    
+    signUp: async (req, res) => {
+        let { name, photo, email, pass, role, from, country, lastName } = req.body
         try {
-            await new User(req.body).save()
-            res.status(201).json({
-                message: 'User Has Been Created',
-                succes: true
-            })
+            
+            await userValidator.validateAsync(req.body)
+
+            let user = await User.findOne({ email })
+            if (!user) {
+                let logged = false
+                let verified = false
+                let code = crypto.randomBytes(15).toString('hex')
+                if (from === 'form') {
+                    pass = bcryptjs.hashSync(pass, 10)
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
+                    sendMail(email, code, name)
+                    res.status(201).json({
+                        message: "user signed up",
+                        success: true
+                    })
+                } else {
+                    pass = bcryptjs.hashSync(pass, 10)
+                    verified = true
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, country, lastName }).save()
+                    res.status(201).json({
+                        message: "user signed up from " + from,
+                        success: true
+                    })
+                }
+            } else {
+                if (user.from.includes(from)) {
+                    res.status(200).json({
+                        message: "user already exist " + from,
+                        success: false
+                    })
+                } else {
+                    user.from.push(from)
+                    user.verified = true
+                    user.pass.push(bcryptjs.hashSync(pass, 10))
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, country, lastName }).save()
+                    res.status(201).json({
+                        message: "user signed up from " + from,
+                        success: true
+                    })
+                }
+            }
         } catch (error) {
+            console.log(error)
             res.status(400).json({
-                message: 'Could Not Be Created',
-                succes: false
+                message: error.message,
+                success: false
             })
         }
-
     },
+
+    signIn: async (req, res) => {
+        const { email, pass, from } = req.body
+        try {
+
+            await userLoginValidator.validateAsync(req.body)
+
+            const user = await User.findOne({ email })
+            if (!user) {
+                res.status(404).json({
+                    message: 'User does not exist, please Sign Up!',
+                    success: false
+                })
+            }
+            else if (user.verified) {
+                const userPass = user.pass.filter(userpassword => bcryptjs.compareSync(pass, userpassword))
+                if (from === "form") {
+                    if (userPass.length > 0) {
+                        const loginUser = {
+                            id: user._id,
+                            email: user.email,
+                            name: user.name,
+                            from: user.from,
+                            photo: user.photo,
+                            role: user.role
+                        }
+                        user.logged = true
+                        await user.save()
+                        res.status(200).json({
+                            message: 'Login Success',
+                            success: true,
+                            response: { user: loginUser }
+                        })
+                    } else {
+                        res.status(400).json({
+                            message: 'Login Failed, please check your email and password',
+                            success: false
+                        })
+                    }
+                }
+                else {
+                    if (userPass.length > 0) {
+                        user.logged = true
+                        const loginUser = {
+                            id: user._id,
+                            email: user.email,
+                            name: user.name,
+                            from: user.from,
+                            photo: user.photo,
+                            role: user.role
+                        }
+                        await user.save()
+                        res.status(200).json({
+                            message: 'Login Success',
+                            success: true,
+                            response: { user: loginUser }
+                        })
+                    } else {
+                        res.status(404).json({
+                            message: 'Login Failed, please check your password',
+                            success: false
+                        })
+                    }
+                }
+            }
+            else {
+                res.status(401).json({
+                    message: 'Login Failed, please verify your email',
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: error.message,
+                success: false
+            })
+        }
+    },
+
+    signOut: async (req, res) => {
+        const { email } = req.body
+        try {
+            const user = await User.findOne({ email: email })
+            if (user) {
+                user.logged = false
+                await user.save()
+                res.status(200).json({
+                    message: 'You were logged out successfully',
+                    success: true,
+                    response: user.logged
+                })
+            } else {
+                res.status(400).json({
+                    message: 'There is no such user logged in',
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "SingOut Error, please..",
+                success: false
+            })
+        }
+    },
+
+    userVerify: async (req, res) => {
+        const { code } = req.params
+        try {
+            const user = await User.findOne({ code: code })
+            if (user) {
+                user.verified = true
+                await user.save()
+                res.redirect('http://localhost:3000/auth/signin')
+            } else {
+                res.status(404).json({
+                    message: "Email doesn't exist in database",
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "Account mail could not be verified",
+                success: false
+            })
+        }
+    }
+
 }
 
 module.exports = userController

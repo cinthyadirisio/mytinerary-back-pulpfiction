@@ -1,5 +1,6 @@
 const Activity = require ('../models/Activity')
 
+
 const activityController = {
     createActivity: async (req, res) => {
 
