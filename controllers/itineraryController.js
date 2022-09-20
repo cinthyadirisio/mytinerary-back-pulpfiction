@@ -249,31 +249,6 @@ const itineraryController = {
             let likedItinerary = await Itinerary.findOne({_id:itineraryID})
 
 
-            // if(likedItinerary){
-            //     if (!likedItinerary.likes.includes(id)){
-            //         likedItinerary.likes.push(id)
-            //         await likedItinerary.save()
-            //         res.status(200).json({
-            //             message: 'Itinerary liked',
-            //             success: true
-            //         })
-            //     } else {
-            //         likedItinerary.likes.pull(id)
-            //         await likedItinerary.save()
-            //         res.status(200).json({
-            //             message: 'Itinerary disliked',
-            //             success: true
-            //         })
-            //     }
-            // } else {
-            //     res.status(404).json({
-            //         message: 'Itinerary not found',
-            //         success: true
-            //     })
-            // }
-
-
-
             if(likedItinerary && likedItinerary.likes.includes(id)){
                 
                 likedItinerary.likes.pull(id)
