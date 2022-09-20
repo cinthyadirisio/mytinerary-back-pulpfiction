@@ -1,4 +1,4 @@
-const request = require('supertest')
+/* const request = require('supertest')
 const app = require('../server')
 const { assert } = require('chai')
 
@@ -32,7 +32,7 @@ describe('POST /cities', function () {
             })
             .then(response => {
                 idCity = response.body.id
-                assert.isString(response.body.id)
+                assert.isString(idCity)
                 done()
             })
     })
@@ -51,3 +51,4 @@ describe('DELETE /cities/:id', function () {
             })
     })
 })
+ */
