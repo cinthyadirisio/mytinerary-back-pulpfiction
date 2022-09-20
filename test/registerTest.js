@@ -2,10 +2,10 @@ const request = require('supertest')
 const app = require('../server')
 
 //  signUp Test
-describe('POST /user/signup', function () {
+describe('POST /auth/signup', function () {
     it('Must respond with 201 message code - SignUp from Google', function (done) {
         request(app)
-            .post('/user/signup')
+            .post('/auth/signup')
             .send({
                 name: 'Maria',
                 lastName: 'Mercedes',
@@ -24,7 +24,7 @@ describe('POST /user/signup', function () {
     })
     it('Must respond with 400 message code', function (done) {
         request(app)
-            .post('/user/signup')
+            .post('/auth/signup')
             .send({})
             .expect(400)
             .end(function (err, res) {
@@ -34,7 +34,7 @@ describe('POST /user/signup', function () {
     })
     it('Must respond with 200 message code - SignUp from Form', function (done) {
         request(app)
-            .post('/user/signup')
+            .post('/auth/signup')
             .send({
                 name: 'Pepe',
                 lastName: 'Perez',
@@ -59,11 +59,11 @@ describe('POST /user/signup', function () {
 
 //  Login Test
 
-describe('POST /user/signin', function () {
+describe('POST /auth/signin', function () {
 
     it('Must respond with 400 message code', function (done) {
         request(app)
-            .post('/user/signin')
+            .post('/auth/signin')
             .send({})
             .expect(400)
             .end(function (err, res) {
@@ -73,7 +73,7 @@ describe('POST /user/signin', function () {
     })
     it('Must respond with 401 message code - SignIn from Form without Verify', function (done) {
         request(app)
-            .post('/user/signin')
+            .post('/auth/signin')
             .send({
                 email: 'testPepePerez@mail.com',
                 from: 'form',
@@ -87,7 +87,7 @@ describe('POST /user/signin', function () {
     })
     it('Must respond with 200 message code - SignIn from Google', function (done) {
         request(app)
-            .post('/user/signin')
+            .post('/auth/signin')
             .send({
                 email: 'testMariaMercedes@mail.com',
                 from: 'google',

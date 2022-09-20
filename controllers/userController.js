@@ -4,6 +4,8 @@ const bcryptjs = require('bcryptjs')
 const sendMail = require('./sendMail')
 const { exists } = require('../models/User')
 const Joi = require('joi')
+const jwt = require('jsonwebtoken')
+
 
 const userValidator = Joi.object({
     "name": Joi.string()
@@ -118,12 +120,23 @@ const userController = {
                             photo: user.photo,
                             role: user.role
                         }
+                        const token = jwt.sign(
+                            {
+                                id: user._id, 
+                                role: user.role
+                            }, 
+                            process.env.KEY_JWT, 
+                            {expiresIn: 60*60*24})
+
                         user.logged = true
                         await user.save()
+
                         res.status(200).json({
                             message: 'Login Success',
                             success: true,
-                            response: { user: loginUser }
+                            response: { 
+                                user: loginUser,
+                                token: token }
                         })
                     } else {
                         res.status(400).json({
