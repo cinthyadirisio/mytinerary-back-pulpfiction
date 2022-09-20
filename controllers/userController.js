@@ -3,6 +3,8 @@ const crypto = require('crypto')
 const bcryptjs = require('bcryptjs')
 const sendMail = require('./sendMail')
 const Joi = require('joi')
+const jwt = require('jsonwebtoken')
+
 
 const userValidator = Joi.object({
     "name": Joi.string().messages({
@@ -132,12 +134,23 @@ const userController = {
                             role: user.role,
                             country: user.country
                         }
+                        const token = jwt.sign(
+                            {
+                                id: user._id, 
+                                role: user.role
+                            }, 
+                            process.env.KEY_JWT, 
+                            {expiresIn: 60*60*24})
+
                         user.logged = true
                         await user.save()
+
                         res.status(200).json({
                             message: 'Login Success',
                             success: true,
-                            response: { user: loginUser }
+                            response: { 
+                                user: loginUser,
+                                token: token }
                         })
                     } else {
                         res.status(400).json({
