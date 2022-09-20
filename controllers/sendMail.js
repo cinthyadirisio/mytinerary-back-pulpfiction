@@ -4,7 +4,7 @@ const OAuth2 = google.auth.OAuth2
 const { GOOGLE_USER, GOOGLE_ID, GOOGLE_SECRET, GOOGLE_REFRESH, GOOGLE_URL } = process.env
 
 
-const sendMail = async (email, code, name) => {
+const sendMail = async (mail, code, name) => {
 
     const client = new OAuth2(
         GOOGLE_ID,
@@ -39,7 +39,7 @@ const sendMail = async (email, code, name) => {
 
     const mailOptions = {
         from: GOOGLE_USER,
-        to: email,
+        to: mail,
         subject: 'Verify your Pulp Fiction Account',
         html: `
             <h1 style="text-align: center; color: #20d8ed;"><strong>
@@ -57,7 +57,7 @@ const sendMail = async (email, code, name) => {
         if (error) {
             console.log(error)
         } else {
-            console.log("Receive ok")
+            console.log("Email has been Sent: Receive ok")
         }
     })
 
