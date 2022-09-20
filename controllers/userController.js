@@ -2,28 +2,42 @@ const User = require('../models/User')
 const crypto = require('crypto')
 const bcryptjs = require('bcryptjs')
 const sendMail = require('./sendMail')
-const { exists } = require('../models/User')
 const Joi = require('joi')
 
 const userValidator = Joi.object({
-    "name": Joi.string()
+    "name": Joi.string().messages({
+        'string.empty' : 'Please type your name'
+    }).required(),
+    "lastName": Joi.string().messages({
+        'string.empty' : 'Please type your last name'
+    })
     .required(),
-    "lastName": Joi.string()
+    "country": Joi.string().messages({
+        'string.empty' : 'Please type your country'
+    })
     .required(),
-    "country": Joi.string()
+    "email": Joi.string().email().messages({
+        'string.empty' : 'Please type your email',
+        'string.email' : 'You must enter a valid email address'
+    })
+    
     .required(),
-    "email": Joi.string()
-    .email()
-    .required(),
-    "pass": Joi.string()
-    .required(),
-    "photo": Joi.string()
+    "pass": Joi.string().alphanum().min(6).messages({
+        'string.empty' : 'Please type your password',
+        'string.alphanum' : 'You must enter a password which contains numbers or letters',
+        'string.min' : 'Your password must be at least 6 characters long'
+    }).required(),
+    "photo": Joi.string().messages({
+        'string.empty' : 'Please enter a photo url'
+    })
         .uri()
         .messages({
             'string.uri': 'You must enter a valid URL'
         })
         .required(),
-    "role": Joi.string().required(),
+    "role": Joi.string().messages({
+        'string.empty' : 'Please type your Name'
+    }).required(),
     "from": Joi.string().required()
 })
 
@@ -47,11 +61,11 @@ const userController = {
 
             let user = await User.findOne({ email })
             if (!user) {
-                let logged = false
+               let logged = false
                 let verified = false
                 let code = crypto.randomBytes(15).toString('hex')
+                pass = bcryptjs.hashSync(pass, 10)
                 if (from === 'form') {
-                    pass = bcryptjs.hashSync(pass, 10)
                     user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
                     sendMail(email, code, name)
                     res.status(201).json({
@@ -59,9 +73,8 @@ const userController = {
                         success: true
                     })
                 } else {
-                    pass = bcryptjs.hashSync(pass, 10)
                     verified = true
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, country, lastName }).save()
+                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, code, country, lastName }).save()
                     res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
@@ -77,8 +90,8 @@ const userController = {
                     user.from.push(from)
                     user.verified = true
                     user.pass.push(bcryptjs.hashSync(pass, 10))
-                    user = await new User({ name, photo, email, pass: [pass], role, from: [from], logged, verified, country, lastName }).save()
-                    res.status(201).json({
+                    await user.save() 
+                   res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
                     })
@@ -116,7 +129,8 @@ const userController = {
                             name: user.name,
                             from: user.from,
                             photo: user.photo,
-                            role: user.role
+                            role: user.role,
+                            country: user.country
                         }
                         user.logged = true
                         await user.save()
@@ -141,7 +155,8 @@ const userController = {
                             name: user.name,
                             from: user.from,
                             photo: user.photo,
-                            role: user.role
+                            role: user.role,
+                            country: user.country
                         }
                         await user.save()
                         res.status(200).json({
@@ -206,7 +221,10 @@ const userController = {
             if (user) {
                 user.verified = true
                 await user.save()
-                res.redirect('http://localhost:3000/auth/signin')
+                res.status(200).json({
+                    message: 'You Activate your Account successfully',
+                    success: true
+                })
             } else {
                 res.status(404).json({
                     message: "Email doesn't exist in database",
