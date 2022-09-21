@@ -8,29 +8,29 @@ const jwt = require('jsonwebtoken')
 
 const userValidator = Joi.object({
     "name": Joi.string().messages({
-        'string.empty' : 'Please type your name'
+        'string.empty': 'Please type your name'
     }).required(),
     "lastName": Joi.string().messages({
-        'string.empty' : 'Please type your last name'
+        'string.empty': 'Please type your last name'
     })
-    .required(),
+        .required(),
     "country": Joi.string().messages({
-        'string.empty' : 'Please type your country'
+        'string.empty': 'Please type your country'
     })
-    .required(),
+        .required(),
     "email": Joi.string().email().messages({
-        'string.empty' : 'Please type your email',
-        'string.email' : 'You must enter a valid email address'
+        'string.empty': 'Please type your email',
+        'string.email': 'You must enter a valid email address'
     })
-    
-    .required(),
+
+        .required(),
     "pass": Joi.string().alphanum().min(6).messages({
-        'string.empty' : 'Please type your password',
-        'string.alphanum' : 'You must enter a password which contains numbers or letters',
-        'string.min' : 'Your password must be at least 6 characters long'
+        'string.empty': 'Please type your password',
+        'string.alphanum': 'You must enter a password which contains numbers or letters',
+        'string.min': 'Your password must be at least 6 characters long'
     }).required(),
     "photo": Joi.string().messages({
-        'string.empty' : 'Please enter a photo url'
+        'string.empty': 'Please enter a photo url'
     })
         .uri()
         .messages({
@@ -38,32 +38,32 @@ const userValidator = Joi.object({
         })
         .required(),
     "role": Joi.string().messages({
-        'string.empty' : 'Please type your Name'
+        'string.empty': 'Please type your Name'
     }).required(),
     "from": Joi.string().required()
 })
 
 const userLoginValidator = Joi.object({
     "email": Joi.string()
-    .email()
-    .required(),
+        .email()
+        .required(),
     "pass": Joi.string()
-    .required(),
+        .required(),
     "from": Joi.string().required()
 })
 
 
 const userController = {
-    
+
     signUp: async (req, res) => {
         let { name, photo, email, pass, role, from, country, lastName } = req.body
         try {
-            
+
             await userValidator.validateAsync(req.body)
 
             let user = await User.findOne({ email })
             if (!user) {
-               let logged = false
+                let logged = false
                 let verified = false
                 let code = crypto.randomBytes(15).toString('hex')
                 pass = bcryptjs.hashSync(pass, 10)
@@ -92,8 +92,8 @@ const userController = {
                     user.from.push(from)
                     user.verified = true
                     user.pass.push(bcryptjs.hashSync(pass, 10))
-                    await user.save() 
-                   res.status(201).json({
+                    await user.save()
+                    res.status(201).json({
                         message: "user signed up from " + from,
                         success: true
                     })
@@ -109,12 +109,24 @@ const userController = {
     },
 
     signIn: async (req, res) => {
+
         const { email, pass, from } = req.body
+
+
         try {
+
 
             await userLoginValidator.validateAsync(req.body)
 
             const user = await User.findOne({ email })
+            const token = jwt.sign(
+                {
+                    id: user._id,
+                    role: user.role
+                },
+                process.env.KEY_JWT,
+                { expiresIn: 60 * 60 * 24 })
+    
             if (!user) {
                 res.status(404).json({
                     message: 'User does not exist, please Sign Up!',
@@ -122,7 +134,9 @@ const userController = {
                 })
             }
             else if (user.verified) {
+
                 const userPass = user.pass.filter(userpassword => bcryptjs.compareSync(pass, userpassword))
+
                 if (from === "form") {
                     if (userPass.length > 0) {
                         const loginUser = {
@@ -134,25 +148,19 @@ const userController = {
                             role: user.role,
                             country: user.country
                         }
-                        const token = jwt.sign(
-                            {
-                                id: user._id, 
-                                role: user.role
-                            }, 
-                            process.env.KEY_JWT, 
-                            {expiresIn: 60*60*24})
-
                         user.logged = true
                         await user.save()
 
                         res.status(200).json({
-                            message: 'Login Success',
+                            message: 'Login Success FROM FORM',
                             success: true,
-                            response: { 
+                            response: {
                                 user: loginUser,
-                                token: token }
+                                token: token
+                            }
                         })
                     } else {
+                        
                         res.status(400).json({
                             message: 'Login Failed, please check your email and password',
                             success: false
@@ -161,6 +169,7 @@ const userController = {
                 }
                 else {
                     if (userPass.length > 0) {
+
                         user.logged = true
                         const loginUser = {
                             id: user._id,
@@ -171,11 +180,15 @@ const userController = {
                             role: user.role,
                             country: user.country
                         }
+
                         await user.save()
                         res.status(200).json({
-                            message: 'Login Success',
+                            message: 'Login Success from GOOGLE',
                             success: true,
-                            response: { user: loginUser }
+                            response: {
+                                 user: loginUser,
+                                 token: token 
+                                }
                         })
                     } else {
                         res.status(404).json({
@@ -251,7 +264,21 @@ const userController = {
                 success: false
             })
         }
-    }
+    },
+    signInWithToken:(req, res) => {
+        if (req.user!==null) { //passport carga req.user (si tiene éxito)
+        res.status(200).json({
+        success: true,
+        response: {user: req.user}, //cargamos los datos en la respuesta
+        message: 'Welcome ' + req.user.name+'!'
+        })
+        } else {
+        res.status(400).json({
+        success: false,
+        message: 'error'
+        })
+        }
+       }
 
 }
 
