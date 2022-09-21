@@ -28,7 +28,7 @@ const commentController = {
 
         try {
             if(query.itinerary){
-                myComment = await Comment.find({itinerary: req.query.itinerary})
+                myComment = await Comment.find({itinerary: req.query.itinerary}).populate('user', {name:1, photo:1, role:1})
 
             }
           
