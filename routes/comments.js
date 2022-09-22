@@ -8,8 +8,8 @@ const { createComment, readById, deleteComment, upDateComment } = require('../co
 
 router.post('/', passport.authenticate('jwt', {session:false}), createComment)
 router.get('/', readById)
-router.patch('/:id', upDateComment)
-router.delete('/:id', deleteComment)
+router.patch('/:id',passport.authenticate('jwt', {session:false}), upDateComment)
+router.delete('/:id',passport.authenticate('jwt', {session:false}), deleteComment)
 
 
 
