@@ -13,7 +13,7 @@ const { createItinerary,
 router.post('/itineraries', createItinerary)
 router.patch('/:id', upDate)
 router.delete('/:id', deleteItinerary)
-router.get('/:id', read);
+router.get('/search/:id', read);
 router.get('/', readByCity);
 router.patch('/likes/:itineraryID', passport.authenticate('jwt', {session:false}), likeDislike)
 
