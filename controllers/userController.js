@@ -152,7 +152,7 @@ const userController = {
                         await user.save()
 
                         res.status(200).json({
-                            message: 'Login Success FROM FORM',
+                            message: 'Login Success',
                             success: true,
                             response: {
                                 user: loginUser,
@@ -183,7 +183,7 @@ const userController = {
 
                         await user.save()
                         res.status(200).json({
-                            message: 'Login Success from GOOGLE',
+                            message: 'Login Success from Google',
                             success: true,
                             response: {
                                  user: loginUser,
