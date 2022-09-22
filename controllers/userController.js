@@ -111,10 +111,7 @@ const userController = {
     signIn: async (req, res) => {
 
         const { email, pass, from } = req.body
-
-
         try {
-
 
             await userLoginValidator.validateAsync(req.body)
 
@@ -146,7 +143,8 @@ const userController = {
                             from: user.from,
                             photo: user.photo,
                             role: user.role,
-                            country: user.country
+                            country: user.country,
+                            lastName: user.lastName
                         }
                         user.logged = true
                         await user.save()
@@ -178,7 +176,8 @@ const userController = {
                             from: user.from,
                             photo: user.photo,
                             role: user.role,
-                            country: user.country
+                            country: user.country,
+                            lastName: user.lastName
                         }
 
                         await user.save()

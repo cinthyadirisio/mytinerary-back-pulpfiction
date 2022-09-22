@@ -277,6 +277,31 @@ const itineraryController = {
                 success: false
             });
         }
+    },
+    readByAdmin : async (req,res)=>{
+
+        let myTinerariesByAdmin
+
+        try {
+            myTinerariesByAdmin = await Itinerary.find()
+
+            if(myTinerariesByAdmin){
+                res.status(200).json({
+                    message: "All itinerary Found by Admin",
+                    response: myTinerariesByAdmin,
+                    succes: true
+                })
+            } else {
+                res.status(404).json({
+                    message: 'Itineraries Not Found by Admin',
+                    succes: false
+                })
+            }
+            
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
 }
