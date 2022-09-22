@@ -7,7 +7,8 @@ const { createItinerary,
     deleteItinerary, 
     read, 
     readByCity,
-    likeDislike } = require('../controllers/itineraryController')
+    likeDislike, 
+    readByAdmin} = require('../controllers/itineraryController')
 
 
 router.post('/itineraries', createItinerary)
@@ -16,7 +17,7 @@ router.delete('/:id', deleteItinerary)
 router.get('/search/:id', read);
 router.get('/', readByCity);
 router.patch('/likes/:itineraryID', passport.authenticate('jwt', {session:false}), likeDislike)
-
+router.get('/alltineraries', passport.authenticate('jwt', {session:false}), readByAdmin)
 
 
 module.exports = router;
