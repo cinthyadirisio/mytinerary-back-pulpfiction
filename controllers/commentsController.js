@@ -29,12 +29,13 @@ const commentController = {
 
         try {
             if(query.itinerary){
-                myComment = await Comment.find({itinerary: req.query.itinerary}).populate('user', {name:1, photo:1, role:1})
+                myComment = await Comment.find( query)
+                .populate('user', {name:1, photo:1, role:1})
 
             }
           
 
-            if (myComment.length > 0) {
+            if (myComment) {
                 res.status(200).json({
                     message: 'You Get a comment for your itinerary',
                     response: myComment,
