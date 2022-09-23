@@ -277,7 +277,36 @@ const userController = {
         message: 'error'
         })
         }
-       }
+       },
+
+
+       editProfile: async (req, res) => {
+        const { id } = req.params
+        try {
+            const newDataProfile = req.body
+
+            let user = await User.findOne({ _id: id})
+
+            if (user){
+                const updateProfile = await User.findByIdAndUpdate(id,newDataProfile)
+                res.status(200).json({
+                    message: updateProfile.name + ': Your Profile Has Been UpDated',
+                    succes: true
+                })
+            }
+
+            
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({
+                message: error.message,
+                succes: false
+            })
+        }
+       },
+    
+
+
 
 }
 

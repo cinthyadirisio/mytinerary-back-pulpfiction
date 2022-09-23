@@ -1,8 +1,11 @@
-/* const request = require('supertest')
+const request = require('supertest')
 const app = require('../server')
 const { assert } = require('chai')
 
 var idCity
+var idUser = "632b2598ef931b9be0370bcc"
+var idCityItinerary = "630f934f844315c76f0bd3ea"
+var idUserItinerary = "632de986d6ee1f38f8ec6d8e"
 
 describe('POST /cities', function () {
 
@@ -41,7 +44,7 @@ describe('POST /cities', function () {
 
 
 describe('DELETE /cities/:id', function () {
-    it('Must respond with 201 code after Delete the city', function (done) {
+    it('Must respond with 201 code  after Delete the city', function (done) {
         request(app)
             .delete(`/cities/${idCity}`)
             .expect(200)
@@ -51,4 +54,49 @@ describe('DELETE /cities/:id', function () {
             })
     })
 })
- */
+
+
+describe('PATCH /auth/update/:id', function () {
+    it('Must respond with 200 code after Update Profile', function (done) {
+        request(app)
+            .patch(`/auth/update/${idUser}`)
+            .send({
+                lastName: "Ya no soy Locura parte 2"
+            })
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                return done();
+            })
+    })
+})
+
+
+describe('GET /myItineraries/?user', function () {
+    it('Must respond with 200 code after get Itinerary by User', function (done) {
+        request(app)
+            .get(`/myItineraries/?user=${idUserItinerary}`)
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                return done();
+            })
+    })
+})
+
+describe('GET /myItineraries/?city', function () {
+    it('Must respond with 200 code after get Itinerary by City', function (done) {
+        request(app)
+            .get(`/myItineraries/?city=${idCityItinerary}`)
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                return done();
+            })
+    })
+})
+
+
+
+
+
