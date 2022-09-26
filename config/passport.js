@@ -1,5 +1,5 @@
 const passport = require('passport')
-const passportJWT = require('passport-JWT')
+const passportJWT = require('passport-jwt')
 
 const {KEY_JWT} = process.env
 const User = require('../models/User')

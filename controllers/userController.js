@@ -116,6 +116,7 @@ const userController = {
             await userLoginValidator.validateAsync(req.body)
 
             const user = await User.findOne({ email })
+
             const token = jwt.sign(
                 {
                     id: user._id,
@@ -169,6 +170,7 @@ const userController = {
                     if (userPass.length > 0) {
 
                         user.logged = true
+                        
                         const loginUser = {
                             id: user._id,
                             email: user.email,
@@ -268,7 +270,7 @@ const userController = {
         if (req.user!==null) { //passport carga req.user (si tiene éxito)
         res.status(200).json({
         success: true,
-        response: {user: req.user}, //cargamos los datos en la respuesta
+        response: {user: req.user}, //cargamos los datos en la respuesta 
         message: 'Welcome ' + req.user.name+'!'
         })
         } else {
