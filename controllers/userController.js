@@ -268,7 +268,7 @@ const userController = {
         if (req.user!==null) { //passport carga req.user (si tiene éxito)
         res.status(200).json({
         success: true,
-        response: {user: req.user}, //cargamos los datos en la respuesta
+        response: {user: req.user}, //cargamos los datos en la respuesta 
         message: 'Welcome ' + req.user.name+'!'
         })
         } else {
