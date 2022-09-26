@@ -116,6 +116,7 @@ const userController = {
             await userLoginValidator.validateAsync(req.body)
 
             const user = await User.findOne({ email })
+
             const token = jwt.sign(
                 {
                     id: user._id,
@@ -169,6 +170,7 @@ const userController = {
                     if (userPass.length > 0) {
 
                         user.logged = true
+                        
                         const loginUser = {
                             id: user._id,
                             email: user.email,
