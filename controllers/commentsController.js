@@ -1,5 +1,6 @@
 const Comment = require ('../models/Comment')
 
+
 const commentController = {
     createComment: async (req, res) => {
 
@@ -28,12 +29,13 @@ const commentController = {
 
         try {
             if(query.itinerary){
-                myComment = await Comment.find({itinerary: req.query.itinerary})
+                myComment = await Comment.find( query)
+                .populate('user', {name:1, photo:1, role:1})
 
             }
           
 
-            if (myComment.length > 0) {
+            if (myComment) {
                 res.status(200).json({
                     message: 'You Get a comment for your itinerary',
                     response: myComment,
@@ -121,6 +123,36 @@ const commentController = {
 
 
 
+    },
+    readByUser: async (req, res) => {
+        let commentByUser
+        let query = {}
+        if (req.query.user){
+            query.user = req.query.user
+        }
+        try {
+            if(query.user){
+                commentByUser = await Comment.find({user: req.query.user})
+            }
+
+            if (commentByUser.length > 0) {
+                res.status(200).json({
+                    message: 'You Get your own comments',
+                    response: commentByUser,
+                    succes: true
+                })
+            } else {
+                res.status(404).json({
+                    message: 'comments Not Found by User',
+                    succes: false
+                })
+            }
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
